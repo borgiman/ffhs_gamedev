@@ -3,7 +3,7 @@
     ✅ display something on every click in the canvas
     ✅ display that something on the position of the mouse
     ✅ use a defense tower sprite as that something that gets displayed
-    ❌ draw a circle with hardcoded radius around that sprite
+    ✅ draw a circle with hardcoded radius around that sprite
     ❌ detect when the mouse is inside the circle and log something
     ❌ log only at most once every 2s
     ❌ instead of logging draw a rocket sprite on the position of the defense tower
@@ -29,8 +29,12 @@ canvasElement.addEventListener('mouseup', function(mouseEvent) {
     const canvasRect = canvasElement.getBoundingClientRect();
     const mouseX = mouseEvent.clientX - canvasRect.left;
     const mouseY = mouseEvent.clientY - canvasRect.top;
-    const x = mouseX - towerImage.width / 2;
-    const y = mouseY - towerImage.height / 2;
+    const towerX = mouseX - towerImage.width / 2;
+    const towerY = mouseY - towerImage.height / 2;
 
-    context.drawImage(towerImage, x, y);
+    context.drawImage(towerImage, towerX, towerY);
+
+    context.beginPath();
+    context.arc(mouseX, mouseY, 100, 0, 2 * Math.PI);
+    context.stroke();
 });
