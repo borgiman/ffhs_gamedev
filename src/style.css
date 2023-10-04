@@ -14,3 +14,9 @@ body {
 canvas {
     background-color: white;
 }
+
+#fps {
+    top: 20px;
+    right: 20px;
+    position: absolute;
+}
