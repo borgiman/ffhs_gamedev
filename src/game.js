@@ -5,7 +5,7 @@
     ✅ use a defense tower sprite as that something that gets displayed
     ✅ draw a circle with hardcoded radius around that sprite
     ✅ detect when the mouse is inside the circle and do something
-    ❌ do something only at most once every 2s
+    ✅ do something only at most once every 5s
     ❌ instead of doing something draw a rocket sprite on the position of the defense tower
     ❌ move that sprite a bit on every tick towards to the location where the mouse was detected
     ❌ turn the sprite so that the rotation matches the way it is moving
@@ -34,52 +34,6 @@ let lastKnownMousePosition = {
     y: -1
 };
 
-MainLoop.setUpdate(update).setDraw(draw).setEnd(end).start();
-
-function update(delta) {
-    entities.forEach(x => x.update(delta));
-}
-
-function draw(interpolationPercentage) {
-    context.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    entities.forEach(x => x.draw(interpolationPercentage));
-}
-
-function end(fps, panic) {
-    fpsElement.textContent = Math.round(fps) + ' FPS';
-
-    if (panic) {
-        const discardedTime = Math.round(MainLoop.resetFrameDelta());
-        console.warn('Main loop panicked, probably because the browser tab was put in the background. Discarding ' + discardedTime + 'ms');
-    }
-}
-
-class Tower {
-    constructor(x, y) {
-        this.sprite = assets.get('tower');
-        this.x = x;
-        this.y = y;
-        this.watchPath = new Path2D();
-        this.watchPath.arc(this.x, this.y, 100, 0, 2 * Math.PI);
-        this.enemyInsideWatchPath = false;
-    }
-
-    update(delta) {
-        this.enemyInsideWatchPath = context.isPointInPath(this.watchPath, lastKnownMousePosition.x, lastKnownMousePosition.y);
-    }
-
-    draw(interpolationPercentage) {
-        const spriteX = this.x - this.sprite.width / 2;
-        const spriteY = this.y - this.sprite.height / 2;
-
-        context.stroke(this.watchPath);
-        context.fillStyle = this.enemyInsideWatchPath ? 'red' : 'white';
-        context.fill(this.watchPath);
-
-        context.drawImage(this.sprite, spriteX, spriteY);
-    }
-}
-
 canvasElement.addEventListener('mouseup', function(mouseEvent) {
     const canvasRect = canvasElement.getBoundingClientRect();
     const mouseX = mouseEvent.clientX - canvasRect.left;
@@ -97,3 +51,57 @@ canvasElement.addEventListener('mousemove', function(mouseEvent) {
         y: mouseY
     };
 });
+
+MainLoop.setUpdate(update).setDraw(draw).setEnd(end).start();
+
+function update(delta) {
+    entities.forEach(x => x.update(delta));
+}
+
+function draw(interpolationPercentage) {
+    context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    entities.forEach(x => x.draw(interpolationPercentage));
+}
+
+function end(fps, panic) {
+    fpsElement.textContent = Math.round(fps) + ' FPS';
+
+    if (panic) {
+        const discardedTime = Math.round(MainLoop.resetFrameDelta());
+        console.warn(`'Main loop panicked, probably because the browser tab was put in the background. Discarding ${discardedTime} ms`);
+    }
+}
+
+class Tower {
+    constructor(x, y) {
+        this.sprite = assets.get('tower');
+        this.x = x;
+        this.y = y;
+        this.watchPath = new Path2D();
+        this.watchPath.arc(this.x, this.y, 100, 0, 2 * Math.PI);
+        this.enemyInsideWatchPath = false;
+        this.timeLastRocketWasShot = new Date(0);
+    }
+
+    update(delta) {
+        this.enemyInsideWatchPath = context.isPointInPath(this.watchPath, lastKnownMousePosition.x, lastKnownMousePosition.y);
+
+        const minTimeBetweenRockets = 5000;
+        const shootRocket = this.enemyInsideWatchPath && this.timeLastRocketWasShot < new Date(Date.now() - minTimeBetweenRockets);
+        if (shootRocket) {
+            this.timeLastRocketWasShot = new Date(Date.now());
+            console.log(`shooting rocket to x: ${lastKnownMousePosition.x} y: ${lastKnownMousePosition.y}`);
+        }
+    }
+
+    draw(interpolationPercentage) {
+        const spriteX = this.x - this.sprite.width / 2;
+        const spriteY = this.y - this.sprite.height / 2;
+
+        context.stroke(this.watchPath);
+        context.fillStyle = this.enemyInsideWatchPath ? 'red' : 'white';
+        context.fill(this.watchPath);
+
+        context.drawImage(this.sprite, spriteX, spriteY);
+    }
+}
