@@ -7,11 +7,11 @@
     ✅ detect when the mouse is inside the circle and do something
     ✅ do something only at most once every 2s
     ✅ instead of doing something draw a rocket sprite on the position of the defense tower
-    ❌ move that sprite a bit on every tick towards to the location where the mouse was detected
+    ✅ move that sprite a bit on every tick towards to the location where the mouse was detected
     ❌ turn the sprite so that the rotation matches the way it is moving
     ❌ when the target location is reached remove rocket sprite and replace with static explosion sprite
     ❌ remove static explosion sprite after 1s
-    ❌ use the current location of the mouse as target of the rocket
+    ✅ use the current location of the mouse as target of the rocket
     ❌ use last known position inside the circle of the mouse when it is outside for the target of the rocket
     ❌ play a sound when the rocket is flying
     ❌ play a sound on impact
@@ -117,6 +117,17 @@ class Rocket {
     }
 
     update(delta) {
+        const speed = 0.15;
+        const xDiff = this.x - lastKnownEnemyPosition.x;
+        const yDiff = this.y - lastKnownEnemyPosition.y;
+        const xDiffAbsolute = Math.abs(xDiff);
+        const yDiffAbsolute = Math.abs(yDiff);
+        const xFactor= xDiffAbsolute > yDiffAbsolute ? 1 : xDiffAbsolute / yDiffAbsolute;
+        const yFactor = xDiffAbsolute > yDiffAbsolute ? yDiffAbsolute / xDiffAbsolute : 1;
+        const deltaX = xFactor * speed * delta;
+        const deltaY = yFactor * speed * delta;
+        this.x = xDiff > 0 ? this.x - deltaX : this.x + deltaX;
+        this.y = yDiff > 0 ? this.y - deltaY : this.y + deltaY;
     }
 
     draw(interpolationPercentage) {
