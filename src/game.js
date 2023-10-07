@@ -8,7 +8,7 @@
     ✅ do something only at most once every 2s
     ✅ instead of doing something draw a rocket sprite on the position of the defense tower
     ✅ move that sprite a bit on every tick towards to the location where the mouse was detected
-    ❌ turn the sprite so that the rotation matches the way it is moving
+    ✅ turn the sprite so that the rotation matches the way it is moving
     ❌ when the target location is reached remove rocket sprite and replace with static explosion sprite
     ❌ remove static explosion sprite after 1s
     ✅ use the current location of the mouse as target of the rocket
@@ -23,6 +23,10 @@
 const canvasElement = document.querySelector('canvas');
 const fpsElement = document.getElementById('fps');
 const context = canvasElement.getContext('2d');
+
+const mathHelper = {
+    getAngleBetweenPoints: (p1, p2) => Math.atan2(p1.y - p2.y, p1.x - p2.x)
+};
 
 const assets = new Map();
 assets.set('tower', new Image());
@@ -104,11 +108,22 @@ class Tower {
     }
 
     draw(interpolationPercentage) {
-        const spriteX = this.x - this.sprite.width / 2;
-        const spriteY = this.y - this.sprite.height / 2;
+        const anchor = {
+            x: this.x,
+            y: this.y
+        };
+        const point = {
+            x: lastKnownEnemyPosition.x,
+            y: lastKnownEnemyPosition.y
+        };
+        const angle = mathHelper.getAngleBetweenPoints(anchor, point) - Math.PI / 2;
 
+        context.save();
         context.stroke(this.watchPath);
-        context.drawImage(this.sprite, spriteX, spriteY);
+        context.translate(this.x, this.y);
+        context.rotate(angle);
+        context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
+        context.restore();
     }
 }
 
@@ -135,9 +150,20 @@ class Rocket {
     }
 
     draw(interpolationPercentage) {
-        const spriteX = this.x - this.sprite.width / 2;
-        const spriteY = this.y - this.sprite.height / 2;
+        const anchor = {
+            x: this.x,
+            y: this.y
+        };
+        const point = {
+            x: lastKnownEnemyPosition.x,
+            y: lastKnownEnemyPosition.y
+        };
+        const angle = mathHelper.getAngleBetweenPoints(anchor, point) - Math.PI / 2;
 
-        context.drawImage(this.sprite, spriteX, spriteY);
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(angle);
+        context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
+        context.restore();
     }
 }
