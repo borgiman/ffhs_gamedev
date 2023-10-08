@@ -108,20 +108,12 @@ class Tower {
     }
 
     draw(interpolationPercentage) {
-        const anchor = {
-            x: this.x,
-            y: this.y
-        };
-        const point = {
-            x: lastKnownEnemyPosition.x,
-            y: lastKnownEnemyPosition.y
-        };
-        const angle = mathHelper.getAngleBetweenPoints(anchor, point) - Math.PI / 2;
+        const lookAtEnemyAngle = mathHelper.getAngleBetweenPoints(this, lastKnownEnemyPosition) - Math.PI / 2;
 
         context.save();
         context.stroke(this.watchPath);
         context.translate(this.x, this.y);
-        context.rotate(angle);
+        context.rotate(lookAtEnemyAngle);
         context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
         context.restore();
     }
@@ -150,19 +142,11 @@ class Rocket {
     }
 
     draw(interpolationPercentage) {
-        const anchor = {
-            x: this.x,
-            y: this.y
-        };
-        const point = {
-            x: lastKnownEnemyPosition.x,
-            y: lastKnownEnemyPosition.y
-        };
-        const angle = mathHelper.getAngleBetweenPoints(anchor, point) - Math.PI / 2;
+        const lookAtEnemyAngle = mathHelper.getAngleBetweenPoints(this, lastKnownEnemyPosition) - Math.PI / 2;
 
         context.save();
         context.translate(this.x, this.y);
-        context.rotate(angle);
+        context.rotate(lookAtEnemyAngle);
         context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
         context.restore();
     }
