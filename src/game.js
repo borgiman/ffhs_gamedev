@@ -12,7 +12,6 @@
     ✅ when the target location is reached remove rocket sprite and replace with static explosion sprite
     ✅ remove static explosion sprite after 0.5s
     ✅ use the current location of the mouse as target of the rocket
-    ❌ use last known position inside the circle of the mouse when it is outside for the target of the rocket
     ❌ play a sound when the rocket is flying
     ❌ play a sound on impact
 
@@ -46,7 +45,7 @@ const zLayers = {
     missile: 2,
     effects: 3
 };
-let lastKnownEnemyPosition = {
+let mousePosition = {
     x: -1,
     y: -1
 };
@@ -63,7 +62,7 @@ canvasElement.addEventListener('mousemove', function(mouseEvent) {
     const canvasRect = canvasElement.getBoundingClientRect();
     const mouseX = mouseEvent.clientX - canvasRect.left;
     const mouseY = mouseEvent.clientY - canvasRect.top;
-    lastKnownEnemyPosition = {
+    mousePosition = {
         x: mouseX,
         y: mouseY
     };
@@ -97,24 +96,31 @@ class Tower {
         this.y = y;
         this.watchPath = new Path2D();
         this.watchPath.arc(this.x, this.y, 100, 0, 2 * Math.PI);
-        this.enemyInsideWatchPath = false;
         this.timeLastRocketWasShot = new Date(Date.now());
+        this.lastKnownEnemyPosition = { x: this.x, y: this.y };
     }
 
     update(delta) {
-        this.enemyInsideWatchPath = context.isPointInPath(this.watchPath, lastKnownEnemyPosition.x, lastKnownEnemyPosition.y);
+        let enemyInsideWatchPath = false;
+
+        if (context.isPointInPath(this.watchPath, mousePosition.x, mousePosition.y)) {
+            this.lastKnownEnemyPosition = mousePosition;
+            enemyInsideWatchPath = true;
+        }
 
         const minTimeBetweenRockets = 2000;
-        const shootRocket = this.enemyInsideWatchPath && this.timeLastRocketWasShot < new Date(Date.now() - minTimeBetweenRockets);
+        const shootRocket = enemyInsideWatchPath && this.timeLastRocketWasShot < new Date(Date.now() - minTimeBetweenRockets);
         if (shootRocket) {
             this.timeLastRocketWasShot = new Date(Date.now());
-            const rocket = new Rocket(this.x, this.y);
+            const enemy = new Enemy(mousePosition.x, mousePosition.y);
+            entities.push(enemy);
+            const rocket = new Rocket(this.x, this.y, enemy);
             entities.push(rocket);
         }
     }
 
     draw(interpolationPercentage) {
-        const lookAtEnemyAngle = mathHelper.getAngleBetweenPoints(this, lastKnownEnemyPosition) - Math.PI / 2;
+        const lookAtEnemyAngle = mathHelper.getAngleBetweenPoints(this, this.lastKnownEnemyPosition) - Math.PI / 2;
 
         context.save();
         context.stroke(this.watchPath);
@@ -126,17 +132,18 @@ class Tower {
 }
 
 class Rocket {
-    constructor(x, y) {
+    constructor(x, y, targetEnemy) {
         this.sprite = assets.get('rocket');
         this.zLayer = zLayers.missile;
         this.x = x;
         this.y = y;
+        this.targetEnemy = targetEnemy;
     }
 
     update(delta) {
         const speed = 0.15;
-        const xDiff = this.x - lastKnownEnemyPosition.x;
-        const yDiff = this.y - lastKnownEnemyPosition.y;
+        const xDiff = this.x - this.targetEnemy.x;
+        const yDiff = this.y - this.targetEnemy.y;
         const xDiffAbsolute = Math.abs(xDiff);
         const yDiffAbsolute = Math.abs(yDiff);
         const xFactor= xDiffAbsolute > yDiffAbsolute ? 1 : xDiffAbsolute / yDiffAbsolute;
@@ -146,7 +153,7 @@ class Rocket {
         this.x = xDiff > 0 ? this.x - deltaX : this.x + deltaX;
         this.y = yDiff > 0 ? this.y - deltaY : this.y + deltaY;
 
-        const distanceToEnemy = mathHelper.getDistanceBetweenPoints(this, lastKnownEnemyPosition);
+        const distanceToEnemy = mathHelper.getDistanceBetweenPoints(this, this.targetEnemy);
         if (distanceToEnemy < 3) {
             entities.splice(entities.indexOf(this), 1);
             entities.push(new Explosion(this.x, this.y));
@@ -154,13 +161,29 @@ class Rocket {
     }
 
     draw(interpolationPercentage) {
-        const lookAtEnemyAngle = mathHelper.getAngleBetweenPoints(this, lastKnownEnemyPosition) - Math.PI / 2;
+        const lookAtEnemyAngle = mathHelper.getAngleBetweenPoints(this, this.targetEnemy) - Math.PI / 2;
 
         context.save();
         context.translate(this.x, this.y);
         context.rotate(lookAtEnemyAngle);
         context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
         context.restore();
+    }
+}
+
+class Enemy {
+    constructor(x, y) {
+        this.zLayer = zLayers.entity;
+        this.x = x;
+        this.y = y;
+    }
+
+    update(delta) {
+        this.x = mousePosition.x;
+        this.y = mousePosition.y;
+    }
+
+    draw(interpolationPercentage) {
     }
 }
 
