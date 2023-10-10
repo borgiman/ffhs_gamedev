@@ -12,8 +12,6 @@
     ✅ when the target location is reached remove rocket sprite and replace with static explosion sprite
     ✅ remove static explosion sprite after 0.5s
     ✅ use the current location of the mouse as target of the rocket
-    ❌ play a sound when the rocket is flying
-    ❌ play a sound on impact
 
     sprite sources, credit goes to Kenney.nl: https://opengameart.org/content/tower-defense-300-tilessprites
     game loop source: https://github.com/IceCreamYou/MainLoop.js
