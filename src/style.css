@@ -1,6 +1,6 @@
 html {
+    color: white;
     height: 100%;
-    overflow: hidden;
 }
 
 body {
@@ -8,21 +8,17 @@ body {
     background-color: rgb(50, 50, 50);
     display: flex;
     flex-direction: column;
-    height: 100%;
     justify-content: center;
 }
 
 canvas {
     background-color: white;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
 }
 
 #fps {
     top: 20px;
     right: 20px;
     position: absolute;
-}
-
-#instructions {
-    color: white;
-    padding-bottom: 3rem;
 }
