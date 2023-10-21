@@ -14,7 +14,4 @@ export default class Enemy {
         this.x =  mousePosition.x;
         this.y = mousePosition.y;
     }
-
-    draw(context, interpolationPercentage) {
-    }
 }

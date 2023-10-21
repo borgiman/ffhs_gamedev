@@ -30,6 +30,8 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 200 OK", "src\\bootstrapper.js")
     } else if buffer.starts_with(b"GET /bridge.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\bridge.js")
+    } else if buffer.starts_with(b"GET /button.js HTTP/1.1\r\n") {
+        ("HTTP/1.1 200 OK", "src\\button.js")
     } else if buffer.starts_with(b"GET /enemy.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\enemy.js")
     } else if buffer.starts_with(b"GET /enums.js HTTP/1.1\r\n") {
