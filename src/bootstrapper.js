@@ -1,23 +1,19 @@
-import State from './state.js';
-import Bridge from './bridge.js';
+import bridge from './bridge.js';
+import game from './game.js';
 
-const canvasElement = Bridge.getCanvasElement();
-const fpsElement = Bridge.getFpsElement();
-const context = Bridge.getContext();
-
-Bridge.registerEventListeners();
+bridge.registerEventListeners();
 MainLoop.setUpdate(update).setDraw(draw).setEnd(end).start();
 
 function update(delta) {
-    State.getEntities().forEach(x => x.update(delta));
+    game.update(delta);
 }
 
 function draw(interpolationPercentage) {
-    context.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    State.getEntities().sort(x => x.zLayer).forEach(x => x.draw(interpolationPercentage));
+    game.draw(interpolationPercentage);
 }
 
 function end(fps, panic) {
+    const fpsElement = bridge.getFpsElement();
     fpsElement.textContent = Math.round(fps) + ' FPS';
 
     if (panic) {

@@ -40,10 +40,12 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 200 OK", "src\\game.js")
     } else if buffer.starts_with(b"GET /math-helper.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\math-helper.js")
+    } else if buffer.starts_with(b"GET /phases.js HTTP/1.1\r\n") {
+        ("HTTP/1.1 200 OK", "src\\phases.js")
     } else if buffer.starts_with(b"GET /rocket.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\rocket.js")
-    } else if buffer.starts_with(b"GET /state.js HTTP/1.1\r\n") {
-        ("HTTP/1.1 200 OK", "src\\state.js")
+    } else if buffer.starts_with(b"GET /global-state.js HTTP/1.1\r\n") {
+        ("HTTP/1.1 200 OK", "src\\global-state.js")
     } else if buffer.starts_with(b"GET /tower.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\tower.js")
     } else {

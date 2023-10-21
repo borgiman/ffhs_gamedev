@@ -1,26 +1,25 @@
-import Assets from './assets.js';
-import Enums from './enums.js';
-import State from './state.js';
-import Bridge from './bridge.js';
+import assets from './assets.js';
+import * as Enums from './enums.js';
+import globalState from './global-state.js';
 import Rocket from './rocket.js';
 import MathHelper from './math-helper.js';
 import Enemy from './enemy.js';
 
 export default class Tower {
-    constructor(x, y) {
-        this.sprite = Assets.getAsset('tower');
-        this.zLayer = Enums.zLayer.entity;
+    constructor(phase, x, y) {
+        this.phase = phase;
         this.x = x;
         this.y = y;
+        this.sprite = assets.getAsset('tower');
+        this.zLayer = Enums.zLayer.entity;
         this.watchPath = new Path2D();
         this.watchPath.arc(this.x, this.y, 100, 0, 2 * Math.PI);
         this.timeLastRocketWasShot = new Date(Date.now());
         this.lastKnownEnemyPosition = { x, y };
     }
 
-    update(delta) {
-        const context = Bridge.getContext();
-        const mousePosition = State.getMousePosition();
+    update(context, delta) {
+        const mousePosition = globalState.getMousePosition();
 
         let enemyInsideWatchPath = false;
         if (context.isPointInPath(this.watchPath, mousePosition.x, mousePosition.y)) {
@@ -32,15 +31,14 @@ export default class Tower {
         const shootRocket = enemyInsideWatchPath && this.timeLastRocketWasShot < new Date(Date.now() - minTimeBetweenRockets);
         if (shootRocket) {
             this.timeLastRocketWasShot = new Date(Date.now());
-            const enemy = new Enemy(mousePosition.x, mousePosition.y);
-            const rocket = new Rocket(this.x, this.y, enemy);
-            State.addEntity(enemy);
-            State.addEntity(rocket);
+            const enemy = new Enemy(this.phase, mousePosition.x, mousePosition.y);
+            const rocket = new Rocket(this.phase, this.x, this.y, enemy);
+            this.phase.addGameObject(enemy);
+            this.phase.addGameObject(rocket);
         }
     }
 
-    draw(interpolationPercentage) {
-        const context = Bridge.getContext();
+    draw(context, interpolationPercentage) {
         const lookAtEnemyAngle = MathHelper.getAngleBetweenPoints(this, this.lastKnownEnemyPosition) - Math.PI / 2;
 
         context.save();

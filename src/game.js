@@ -1,22 +1,36 @@
-import Bridge from './bridge.js';
-import Tower from './tower.js';
-import State from './state.js';
+import bridge from './bridge.js';
+import globalState from './global-state.js';
+import * as Phases from './phases.js';
+import { phaseType } from './enums.js';
 
-export default class Game {
-    static registerMouseUp(mouseEvent) {
-        const canvasElement = Bridge.getCanvasElement();
-        const canvasRect = canvasElement.getBoundingClientRect();
-        const mouseX = mouseEvent.clientX - canvasRect.left;
-        const mouseY = mouseEvent.clientY - canvasRect.top;
-        const tower = new Tower(mouseX, mouseY);
-        State.addEntity(tower);
+class Game {
+    constructor() {
+        this.canvasElement = bridge.getCanvasElement();
+        this.context = bridge.getContext();
+        this.phases = [
+            new Phases.PlanningPhase(),
+            new Phases.PlayingPhase()
+        ];
+        this.currentActivePhase = this.phases.find(x => x.phaseType === phaseType.planning);
     }
 
-    static registerMouseMove(mouseEvent) {
-        const canvasElement = Bridge.getCanvasElement();
-        const canvasRect = canvasElement.getBoundingClientRect();
-        const mouseX = mouseEvent.clientX - canvasRect.left;
-        const mouseY = mouseEvent.clientY - canvasRect.top;
-        State.setMousePosition(mouseX, mouseY);
+    registerMouseUp(mouseX, mouseY) {
+        this.currentActivePhase.registerMouseUp(mouseX, mouseY);
+    }
+
+    registerMouseMove(mouseX, mouseY) {
+        globalState.setMousePosition(mouseX, mouseY);
+    }
+
+    update(delta) {
+        this.currentActivePhase.update(this.context, delta);
+    }
+
+    draw(interpolationPercentage) {
+        this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+        this.currentActivePhase.draw(this.context, interpolationPercentage);
     }
 }
+
+const game = new Game();
+export default game;

@@ -1,24 +1,38 @@
-import Game from './game.js';
-
-const canvasElement = document.querySelector('canvas');
-const fpsElement = document.getElementById('fps');
-const context = canvasElement.getContext('2d');
-
-export default class Bridge {
-    static registerEventListeners() {
-        canvasElement.addEventListener('mouseup', Game.registerMouseUp);
-        canvasElement.addEventListener('mousemove', Game.registerMouseMove);
+class Bridge {
+    constructor() {
+        this.canvasElement = document.querySelector('canvas');
+        this.canvasRect = this.canvasElement.getBoundingClientRect();
+        this.fpsElement = document.getElementById('fps');
+        this.context = this.canvasElement.getContext('2d');
     }
 
-    static getCanvasElement() {
-        return canvasElement;
+    registerEventListeners() {
+        this.canvasElement.addEventListener('mouseup', async mouseEvent => {
+            const mouseX = mouseEvent.clientX - this.canvasRect.left;
+            const mouseY = mouseEvent.clientY - this.canvasRect.top;
+            const game = await import('./game.js');
+            game.default.registerMouseUp(mouseX, mouseY);
+        });
+        this.canvasElement.addEventListener('mousemove', async mouseEvent => {
+            const mouseX = mouseEvent.clientX - this.canvasRect.left;
+            const mouseY = mouseEvent.clientY - this.canvasRect.top;
+            const game = await import('./game.js');
+            game.default.registerMouseMove(mouseX, mouseY);
+        });
     }
 
-    static getFpsElement() {
-        return fpsElement;
+    getCanvasElement() {
+        return this.canvasElement;
     }
 
-    static getContext() {
-        return context;
+    getFpsElement() {
+        return this.fpsElement;
+    }
+
+    getContext() {
+        return this.context;
     }
 }
+
+const bridge = new Bridge();
+export default bridge;

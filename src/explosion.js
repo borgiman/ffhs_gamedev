@@ -1,29 +1,27 @@
-import State from './state.js';
-import Assets from './assets.js';
-import Enums from './enums.js';
-import Bridge from './bridge.js';
+import assets from './assets.js';
+import * as Enums from './enums.js';
 
 export default class Explosion {
-    constructor(x, y) {
-        this.sprite_small = Assets.getAsset('explosion_small');
-        this.sprite_big = Assets.getAsset('explosion_big');
-        this.sprite = this.sprite_small;
-        this.zLayer = Enums.zLayer.effects;
+    constructor(phase, x, y) {
+        this.phase = phase;
         this.x = x;
         this.y = y;
+        this.sprite_small = assets.getAsset('explosion_small');
+        this.sprite_big = assets.getAsset('explosion_big');
+        this.sprite = this.sprite_small;
+        this.zLayer = Enums.zLayer.effects;
         this.deathDate = new Date(Date.now() + 500);
     }
 
-    update(delta) {
+    update(context, delta) {
         this.sprite = this.sprite === this.sprite_small ? this.sprite_big : this.sprite_small;
 
         if (new Date(Date.now()) > this.deathDate) {
-            State.removeEntity(this);
+            this.phase.removeGameObject(this);
         }
     }
 
-    draw(interpolationPercentage) {
-        const context = Bridge.getContext();
+    draw(context, interpolationPercentage) {
         context.drawImage(this.sprite, this.x - this.sprite.width / 2, this.y - this.sprite.height / 2);
     }
 }
