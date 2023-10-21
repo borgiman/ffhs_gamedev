@@ -15,7 +15,7 @@ class Phase {
         this.gameObjects.splice(this.gameObjects.indexOf(gameObject), 1);
     }
 
-    registerMouseUp(mouseX, mouseY) {
+    onMouseUp(mouseX, mouseY) {
     }
 
     update(context, delta) {
@@ -32,7 +32,7 @@ export class PlanningPhase extends Phase {
         super(phaseType.planning);
     }
 
-    registerMouseUp(mouseX, mouseY) {
+    onMouseUp(mouseX, mouseY) {
         const tower = new Tower(this, mouseX, mouseY);
         this.addGameObject(tower);
     }

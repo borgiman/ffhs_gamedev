@@ -12,13 +12,20 @@ class Game {
             new Phases.PlayingPhase()
         ];
         this.currentActivePhase = this.phases.find(x => x.phaseType === phaseType.planning);
+
+        // soon to be deleted
+        window.addEventListener('keydown', x => {
+            if (x.code === 'Enter') {
+                this.currentActivePhase = this.phases.find(xx => xx !== this.currentActivePhase);
+            }
+        })
     }
 
-    registerMouseUp(mouseX, mouseY) {
-        this.currentActivePhase.registerMouseUp(mouseX, mouseY);
+    onMouseUp(mouseX, mouseY) {
+        this.currentActivePhase.onMouseUp(mouseX, mouseY);
     }
 
-    registerMouseMove(mouseX, mouseY) {
+    onMouseMove(mouseX, mouseY) {
         globalState.setMousePosition(mouseX, mouseY);
     }
 
