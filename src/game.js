@@ -3,6 +3,7 @@ import globalState from './global-state.js';
 import BootstrapPhase from './phase-bootstrap.js';
 import PlanningPhase from './phase-planning.js';
 import PlayingPhase from './phase-playing.js';
+import GameOverPhase from './phase-gameover.js';
 import * as Enums from './enums.js';
 
 class Game {
@@ -12,17 +13,11 @@ class Game {
         this.phases = [
             new BootstrapPhase(this),
             new PlanningPhase(this),
-            new PlayingPhase(this)
+            new PlayingPhase(this),
+            new GameOverPhase(this)
         ];
         this.currentActivePhase = this.phases.find(x => x.phaseType === Enums.phaseType.bootstrap);
         this.transitionToNextPhase();
-
-        // soon to be deleted
-        window.addEventListener('keydown', x => {
-            if (x.code === 'Enter') {
-                this.transitionToNextPhase();
-            }
-        })
     }
 
     onMouseUp(mouseX, mouseY) {

@@ -12,6 +12,7 @@ export default class Enemy {
         this.sprite = assets.getAsset('airplane');
         this.nextDirtTilePositionIndex = 1;
         this.nextDirtTilePosition = gameMapManager.getDirtTilePositions()[this.nextDirtTilePositionIndex];
+        this.reachedFinishLine = false;
     }
 
     update(context, delta) {
@@ -24,6 +25,8 @@ export default class Enemy {
             const dirtTilePositions = gameMapManager.getDirtTilePositions();
             if (dirtTilePositions.length > this.nextDirtTilePositionIndex + 1) {
                 this.nextDirtTilePosition = dirtTilePositions[++this.nextDirtTilePositionIndex];
+            } else {
+                this.reachedFinishLine = true;
             }
         }
     }

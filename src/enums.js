@@ -8,7 +8,8 @@ const zLayer = {
 const phaseType = {
     bootstrap: 0,
     planning: 1,
-    playing: 2
+    playing: 2,
+    gameOver: 3
 };
 
 export { zLayer, phaseType };

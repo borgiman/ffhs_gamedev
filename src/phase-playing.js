@@ -10,8 +10,20 @@ export default class PlayingPhase extends Phase {
         super(game, Enums.phaseType.playing);
     }
 
+    update(context, delta) {
+        super.update(context, delta);
+
+        const enemiesSurvived = this.getGameObjects().find(x => x instanceof Enemy && x.reachedFinishLine === true) !== undefined;
+        if (enemiesSurvived) {
+            this.game.transitionToNextPhase();
+        }
+    }
+
     getNextPhaseType() {
-        return Enums.phaseType.planning;
+        const enemiesSurvived = this.getGameObjects().find(x => x instanceof Enemy && x.reachedFinishLine === true) !== undefined;
+        return enemiesSurvived
+            ? Enums.phaseType.gameOver
+            : Enums.phaseType.planning;
     }
 
     transitionFrom(oldPhase) {

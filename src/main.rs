@@ -51,11 +51,13 @@ fn handle_connection(mut stream: TcpStream) {
     } else if buffer.starts_with(b"GET /phase.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\phase.js")
     } else if buffer.starts_with(b"GET /phase-bootstrap.js HTTP/1.1\r\n") {
-        ("HTTP/1.1 200 OK", "src\\phase.js")
+        ("HTTP/1.1 200 OK", "src\\phase-bootstrap.js")
+    } else if buffer.starts_with(b"GET /phase-gameover.js HTTP/1.1\r\n") {
+        ("HTTP/1.1 200 OK", "src\\phase-gameover.js")
     } else if buffer.starts_with(b"GET /phase-planning.js HTTP/1.1\r\n") {
-        ("HTTP/1.1 200 OK", "src\\phase.js")
+        ("HTTP/1.1 200 OK", "src\\phase-planning.js")
     } else if buffer.starts_with(b"GET /phase-playing.js HTTP/1.1\r\n") {
-        ("HTTP/1.1 200 OK", "src\\phase.js")
+        ("HTTP/1.1 200 OK", "src\\phase-playing.js")
     } else if buffer.starts_with(b"GET /rocket.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\rocket.js")
     } else if buffer.starts_with(b"GET /tower.js HTTP/1.1\r\n") {
