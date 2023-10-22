@@ -33,7 +33,10 @@ export default class PlanningPhase extends Phase {
         super.transitionFrom(oldPhase);
         oldPhase.gameObjects
             .filter(x => x instanceof GameMap || x instanceof Tower)
-            .forEach(x => super.addGameObject(x));
+            .forEach(x => {
+                x.phase = this;
+                super.addGameObject(x)
+            });
     }
 
     reset() {

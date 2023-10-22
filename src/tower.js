@@ -14,28 +14,31 @@ export default class Tower {
         this.watchPathRadius = 150;
         this.watchPath = new Path2D();
         this.watchPath.arc(this.x, this.y, this.watchPathRadius, 0, 2 * Math.PI);
-        this.timeLastRocketWasShot = new Date(Date.now());
+        this.minTimeBetweenRockets = 2000;
+        this.timeLastRocketWasShot = new Date(Date.now() - this.minTimeBetweenRockets);
         this.lastKnownEnemyPosition = { x, y };
     }
 
     update(context, delta) {
-        const minTimeBetweenRockets = 2000;
-        if (this.timeLastRocketWasShot > new Date(Date.now() - minTimeBetweenRockets)) {
+        if (this.phase.phaseType !== Enums.phaseType.playing) {
             return;
         }
 
         const nearEnemy = this.phase.getGameObjects().find(
             x => x instanceof Enemy &&
-            MathHelper.getDistanceBetweenPoints(this, nearEnemy) <= this.watchPathRadius);
-
+                MathHelper.getDistanceBetweenPoints(this, x) <= this.watchPathRadius);
         if (nearEnemy === undefined) {
             return;
         }
 
         this.lastKnownEnemyPosition = { x: nearEnemy.x, y: nearEnemy.y };
+
+        if (this.timeLastRocketWasShot > new Date(Date.now() - this.minTimeBetweenRockets)) {
+            return;
+        }
+
         this.timeLastRocketWasShot = new Date(Date.now());
         const rocket = new Rocket(this.phase, this.x, this.y, nearEnemy);
-        this.phase.addGameObject(nearEnemy);
         this.phase.addGameObject(rocket);
     }
 

@@ -14,7 +14,7 @@ export default class Rocket {
     }
 
     update(context, delta) {
-        let deltaMovement = MathHelper.getDeltaMovementFromPointToPoint(0.15, this, this.targetEnemy, delta);
+        let deltaMovement = MathHelper.getDeltaMovementFromPointToPoint(0.25, this, this.targetEnemy, delta);
         this.x += deltaMovement.x;
         this.y += deltaMovement.y;
 
