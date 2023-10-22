@@ -10,4 +10,18 @@ export default class MathHelper {
     static getPointAlongBezierCurve(percent, start, control, end) {
         return Math.pow(1 - percent,2) * start + 2 * (1 - percent) * percent * control + Math.pow(percent,2) * end;
     }
+
+    static getDeltaMovementFromPointToPoint(speed, here, there, delta) {
+        const xDiff = here.x - there.x;
+        const yDiff = here.y - there.y;
+        const xDiffAbsolute = Math.abs(xDiff);
+        const yDiffAbsolute = Math.abs(yDiff);
+        const xFactor = xDiffAbsolute > yDiffAbsolute ? 1 : xDiffAbsolute / yDiffAbsolute;
+        const yFactor = xDiffAbsolute > yDiffAbsolute ? yDiffAbsolute / xDiffAbsolute : 1;
+        const deltaX = xFactor * speed * delta;
+        const deltaY = yFactor * speed * delta;
+        const x = xDiff > 0 ? -deltaX : deltaX;
+        const y = yDiff > 0 ? -deltaY : deltaY;
+        return { x, y };
+    }
 }

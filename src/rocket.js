@@ -14,17 +14,9 @@ export default class Rocket {
     }
 
     update(context, delta) {
-        const speed = 0.15;
-        const xDiff = this.x - this.targetEnemy.x;
-        const yDiff = this.y - this.targetEnemy.y;
-        const xDiffAbsolute = Math.abs(xDiff);
-        const yDiffAbsolute = Math.abs(yDiff);
-        const xFactor = xDiffAbsolute > yDiffAbsolute ? 1 : xDiffAbsolute / yDiffAbsolute;
-        const yFactor = xDiffAbsolute > yDiffAbsolute ? yDiffAbsolute / xDiffAbsolute : 1;
-        const deltaX = xFactor * speed * delta;
-        const deltaY = yFactor * speed * delta;
-        this.x = xDiff > 0 ? this.x - deltaX : this.x + deltaX;
-        this.y = yDiff > 0 ? this.y - deltaY : this.y + deltaY;
+        let deltaMovement = MathHelper.getDeltaMovementFromPointToPoint(0.15, this, this.targetEnemy, delta);
+        this.x += deltaMovement.x;
+        this.y += deltaMovement.y;
 
         const distanceToEnemy = MathHelper.getDistanceBetweenPoints(this, this.targetEnemy);
         if (distanceToEnemy < 3) {
