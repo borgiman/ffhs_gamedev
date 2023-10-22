@@ -25,6 +25,10 @@ class Bridge {
         return this.canvasElement;
     }
 
+    getCanvasRect() {
+        return this.canvasRect;
+    }
+
     getFpsElement() {
         return this.fpsElement;
     }

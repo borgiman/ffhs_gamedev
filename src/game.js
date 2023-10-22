@@ -8,10 +8,12 @@ class Game {
         this.canvasElement = bridge.getCanvasElement();
         this.context = bridge.getContext();
         this.phases = [
+            new Phases.BootstrapPhase(this),
             new Phases.PlanningPhase(this),
             new Phases.PlayingPhase(this)
         ];
-        this.currentActivePhase = this.phases.find(x => x.phaseType === phaseType.planning);
+        this.currentActivePhase = this.phases.find(x => x.phaseType === phaseType.bootstrap);
+        this.transitionToNextPhase();
 
         // soon to be deleted
         window.addEventListener('keydown', x => {

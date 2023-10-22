@@ -6,8 +6,9 @@ const zLayer = {
     ui: 4
 };
 const phaseType = {
-    planning: 0,
-    playing: 1
+    bootstrap: 0,
+    planning: 1,
+    playing: 2
 };
 
 export { zLayer, phaseType };

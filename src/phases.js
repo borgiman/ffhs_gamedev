@@ -1,6 +1,7 @@
 import { phaseType } from './enums.js';
 import Tower from './tower.js';
 import Button from './button.js';
+import GameMap from './game-map.js';
 
 class Phase {
     constructor(game, phaseType) {
@@ -55,6 +56,22 @@ class Phase {
     }
 }
 
+export class BootstrapPhase extends Phase {
+    constructor(game) {
+        super(game, phaseType.bootstrap);
+    }
+
+    getNextPhaseType() {
+        return phaseType.planning;
+    }
+
+    reset() {
+        super.reset();
+        const gameMap = new GameMap(this);
+        super.addGameObject(gameMap);
+    }
+}
+
 export class PlanningPhase extends Phase {
     constructor(game) {
         super(game, phaseType.planning);
@@ -75,7 +92,7 @@ export class PlanningPhase extends Phase {
     transitionFrom(oldPhase) {
         super.transitionFrom(oldPhase);
         oldPhase.gameObjects
-            .filter(x => x instanceof Tower)
+            .filter(x => x instanceof GameMap || x instanceof Tower)
             .forEach(x => super.addGameObject(x));
     }
 
@@ -98,7 +115,7 @@ export class PlayingPhase extends Phase {
     transitionFrom(oldPhase) {
         super.transitionFrom(oldPhase);
         oldPhase.gameObjects
-            .filter(x => x instanceof Tower)
+            .filter(x => x instanceof GameMap || x instanceof Tower)
             .forEach(x => super.addGameObject(x));
     }
 }
