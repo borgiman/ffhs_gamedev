@@ -3,7 +3,8 @@ import Tower from './tower.js';
 import Button from './button.js';
 
 class Phase {
-    constructor(phaseType) {
+    constructor(game, phaseType) {
+        this.game = game;
         this.gameObjects = [];
         this.phaseType = phaseType;
     }
@@ -21,6 +22,15 @@ class Phase {
             .forEach(x => x.draw(context, interpolationPercentage));
     }
 
+    onMouseUp(context, mouseX, mouseY) {
+        const handled = this.gameObjects
+            .filter(x => x.onMouseUp)
+            .sort((x1, x2) => x2.zLayer - x1.zLayer)
+            .find(x => x.onMouseUp(context, mouseX, mouseY) === true)
+            != undefined;
+        return handled;
+    }
+
     addGameObject(gameObject) {
         this.gameObjects.push(gameObject);
     }
@@ -29,26 +39,40 @@ class Phase {
         this.gameObjects.splice(this.gameObjects.indexOf(gameObject), 1);
     }
 
-    onMouseUp(mouseX, mouseY) {
+    getNextPhaseType() {
+    }
+
+    transitionToNextPhase() {
+        this.game.transitionToNextPhase();
     }
 }
 
 export class PlanningPhase extends Phase {
-    constructor() {
-        super(phaseType.planning);
-        const readyButton = new Button('Ready', 400, 300);
+    constructor(game) {
+        super(game, phaseType.planning);
+        const readyButton = new Button('Ready', 400, 50, () => super.transitionToNextPhase());
         super.addGameObject(readyButton);
     }
 
-    onMouseUp(mouseX, mouseY) {
-        super.onMouseUp(mouseX, mouseY);
-        const tower = new Tower(this, mouseX, mouseY);
-        this.addGameObject(tower);
+    onMouseUp(context, mouseX, mouseY) {
+        const handled = super.onMouseUp(context, mouseX, mouseY);
+        if (!handled) {
+            const tower = new Tower(this, mouseX, mouseY);
+            this.addGameObject(tower);
+        }
+    }
+
+    getNextPhaseType() {
+        return phaseType.playing;
     }
 }
 
 export class PlayingPhase extends Phase {
-    constructor() {
-        super(phaseType.playing);
+    constructor(game) {
+        super(game, phaseType.playing);
+    }
+
+    getNextPhaseType() {
+        return phaseType.planning;
     }
 }
