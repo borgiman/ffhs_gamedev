@@ -1,18 +1,20 @@
 import bridge from './bridge.js';
 import globalState from './global-state.js';
-import * as Phases from './phases.js';
-import { phaseType } from './enums.js';
+import BootstrapPhase from './phase-bootstrap.js';
+import PlanningPhase from './phase-planning.js';
+import PlayingPhase from './phase-playing.js';
+import * as Enums from './enums.js';
 
 class Game {
     constructor() {
         this.canvasElement = bridge.getCanvasElement();
         this.context = bridge.getContext();
         this.phases = [
-            new Phases.BootstrapPhase(this),
-            new Phases.PlanningPhase(this),
-            new Phases.PlayingPhase(this)
+            new BootstrapPhase(this),
+            new PlanningPhase(this),
+            new PlayingPhase(this)
         ];
-        this.currentActivePhase = this.phases.find(x => x.phaseType === phaseType.bootstrap);
+        this.currentActivePhase = this.phases.find(x => x.phaseType === Enums.phaseType.bootstrap);
         this.transitionToNextPhase();
 
         // soon to be deleted
