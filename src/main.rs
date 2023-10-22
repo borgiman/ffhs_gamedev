@@ -42,6 +42,8 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 200 OK", "src\\game.js")
     } else if buffer.starts_with(b"GET /game-map.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\game-map.js")
+    } else if buffer.starts_with(b"GET /game-map-manager.js HTTP/1.1\r\n") {
+        ("HTTP/1.1 200 OK", "src\\game-map-manager.js")
     } else if buffer.starts_with(b"GET /global-state.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\global-state.js")
     } else if buffer.starts_with(b"GET /math-helper.js HTTP/1.1\r\n") {

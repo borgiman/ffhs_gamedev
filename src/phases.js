@@ -2,6 +2,7 @@ import { phaseType } from './enums.js';
 import Tower from './tower.js';
 import Button from './button.js';
 import GameMap from './game-map.js';
+import gameMapManager from './game-map-manager.js';
 
 class Phase {
     constructor(game, phaseType) {
@@ -80,8 +81,15 @@ export class PlanningPhase extends Phase {
     onMouseUp(context, mouseX, mouseY) {
         const handled = super.onMouseUp(context, mouseX, mouseY);
         if (!handled) {
-            const tower = new Tower(this, mouseX, mouseY);
-            this.addGameObject(tower);
+            if (gameMapManager.canPlacePlayerEntity(
+                Tower.getWidth(),
+                Tower.getHeight(),
+                mouseX,
+                mouseY
+            )) {
+                const tower = new Tower(this, mouseX, mouseY);
+                this.addGameObject(tower);
+            }
         }
     }
 

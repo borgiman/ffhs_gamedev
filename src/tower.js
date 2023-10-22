@@ -10,10 +10,10 @@ export default class Tower {
         this.phase = phase;
         this.x = x;
         this.y = y;
-        this.sprite = assets.getAsset('tower');
+        this.sprite = Tower.getSprite();
         this.zLayer = Enums.zLayer.entity;
         this.watchPath = new Path2D();
-        this.watchPath.arc(this.x, this.y, 100, 0, 2 * Math.PI);
+        this.watchPath.arc(this.x, this.y, 150, 0, 2 * Math.PI);
         this.timeLastRocketWasShot = new Date(Date.now());
         this.lastKnownEnemyPosition = { x, y };
     }
@@ -47,5 +47,17 @@ export default class Tower {
         context.rotate(lookAtEnemyAngle);
         context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
         context.restore();
+    }
+
+    static getSprite() {
+        return assets.getAsset('tower');
+    }
+
+    static getWidth() {
+        return this.getSprite().width;
+    }
+
+    static getHeight() {
+        return this.getSprite().height;
     }
 }
