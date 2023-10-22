@@ -5,8 +5,8 @@ import Button from './button.js';
 class Phase {
     constructor(game, phaseType) {
         this.game = game;
-        this.gameObjects = [];
         this.phaseType = phaseType;
+        this.reset();
     }
 
     update(context, delta) {
@@ -27,7 +27,7 @@ class Phase {
             .filter(x => x.onMouseUp)
             .sort((x1, x2) => x2.zLayer - x1.zLayer)
             .find(x => x.onMouseUp(context, mouseX, mouseY) === true)
-            != undefined;
+            !== undefined;
         return handled;
     }
 
@@ -45,13 +45,19 @@ class Phase {
     transitionToNextPhase() {
         this.game.transitionToNextPhase();
     }
+
+    transitionFrom(oldPhase) {
+        this.reset();
+    }
+
+    reset() {
+        this.gameObjects = [];
+    }
 }
 
 export class PlanningPhase extends Phase {
     constructor(game) {
         super(game, phaseType.planning);
-        const readyButton = new Button('Ready', 400, 50, () => super.transitionToNextPhase());
-        super.addGameObject(readyButton);
     }
 
     onMouseUp(context, mouseX, mouseY) {
@@ -65,6 +71,19 @@ export class PlanningPhase extends Phase {
     getNextPhaseType() {
         return phaseType.playing;
     }
+
+    transitionFrom(oldPhase) {
+        super.transitionFrom(oldPhase);
+        oldPhase.gameObjects
+            .filter(x => x instanceof Tower)
+            .forEach(x => super.addGameObject(x));
+    }
+
+    reset() {
+        super.reset();
+        const readyButton = new Button('Ready', 400, 50, () => super.transitionToNextPhase());
+        super.addGameObject(readyButton);
+    }
 }
 
 export class PlayingPhase extends Phase {
@@ -74,5 +93,12 @@ export class PlayingPhase extends Phase {
 
     getNextPhaseType() {
         return phaseType.planning;
+    }
+
+    transitionFrom(oldPhase) {
+        super.transitionFrom(oldPhase);
+        oldPhase.gameObjects
+            .filter(x => x instanceof Tower)
+            .forEach(x => super.addGameObject(x));
     }
 }

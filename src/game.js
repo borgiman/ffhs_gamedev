@@ -16,7 +16,7 @@ class Game {
         // soon to be deleted
         window.addEventListener('keydown', x => {
             if (x.code === 'Enter') {
-                this.currentActivePhase = this.phases.find(xx => xx !== this.currentActivePhase);
+                this.transitionToNextPhase();
             }
         })
     }
@@ -41,6 +41,7 @@ class Game {
     transitionToNextPhase() {
         const nextPhaseType = this.currentActivePhase.getNextPhaseType();
         const nextPhase = this.phases.find(x => x.phaseType === nextPhaseType);
+        nextPhase.transitionFrom(this.currentActivePhase);
         this.currentActivePhase = nextPhase;
     }
 }
