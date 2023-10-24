@@ -3,6 +3,7 @@ import assets from './assets.js';
 import gameMapManager from './game-map-manager.js';
 import MathHelper from './math-helper.js';
 import GameObject from './game-object.js';
+import globalState from './global-state.js';
 
 export default class Enemy extends GameObject {
     constructor(x, y) {
@@ -13,8 +14,9 @@ export default class Enemy extends GameObject {
         this.nextDirtTilePositionIndex = 1;
         this.nextDirtTilePosition = gameMapManager.getDirtTilePositions()[this.nextDirtTilePositionIndex];
         this.reachedFinishLine = false;
-        this.maxHealth = 50;
+        this.maxHealth = Math.random() * 30 * globalState.level;
         this.health = this.maxHealth;
+        this.dead = false;
     }
 
     update(context, delta) {
@@ -59,7 +61,9 @@ export default class Enemy extends GameObject {
 
     damage(amount) {
         this.health -= amount;
-        if (this.health <= 0) {
+        if (this.health <= 0 && !this.dead) {
+            this.dead = true;
+            globalState.cash += 3;
             this.phase.removeGameObject(this);
         }
     }
