@@ -19,7 +19,7 @@ export default class PlanningPhase extends Phase {
                 mouseX,
                 mouseY
             )) {
-                const tower = new Tower(this, mouseX, mouseY);
+                const tower = new Tower(mouseX, mouseY);
                 this.addGameObject(tower);
             }
         }

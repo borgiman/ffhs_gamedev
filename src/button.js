@@ -1,7 +1,10 @@
 import * as Enums from './enums.js';
+import GameObject from './game-object.js';
 
-export default class Button {
+export default class Button extends GameObject {
     constructor(text, x, y, action) {
+        super(x, y);
+
         this.text = text;
         this.action = action;
         this.zLayer = Enums.zLayer.ui;
@@ -13,6 +16,8 @@ export default class Button {
     }
 
     draw(context, interpolationPercentage) {
+        super.draw(context, interpolationPercentage);
+
         this.pulseDirection = (this.pulseStrength || 0) <= 0 || (this.pulseStrength || 0) >= 5
             ? (this.pulseDirection || -1) * -1
             : this.pulseDirection;
@@ -34,6 +39,8 @@ export default class Button {
     }
 
     onMouseUp(context, mouseX, mouseY) {
+        super.onMouseUp(context, mouseX, mouseY);
+
         const buttonPath = new Path2D();
         buttonPath.rect(this.x, this.y, this.width, this.height);
 

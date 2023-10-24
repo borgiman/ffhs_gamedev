@@ -3,12 +3,12 @@ import * as Enums from './enums.js';
 import Rocket from './rocket.js';
 import MathHelper from './math-helper.js';
 import Enemy from './enemy.js';
+import GameObject from './game-object.js';
 
-export default class Tower {
-    constructor(phase, x, y) {
-        this.phase = phase;
-        this.x = x;
-        this.y = y;
+export default class Tower extends GameObject {
+    constructor(x, y) {
+        super(x, y);
+
         this.sprite = Tower.getSprite();
         this.zLayer = Enums.zLayer.entity;
         this.watchPathRadius = 150;
@@ -24,9 +24,8 @@ export default class Tower {
             return;
         }
 
-        const nearEnemy = this.phase.getGameObjects().find(
-            x => x instanceof Enemy &&
-                MathHelper.getDistanceBetweenPoints(this, x) <= this.watchPathRadius);
+        const enemies = this.phase.getGameObjectsOfType(Enemy);
+        const nearEnemy = enemies.find(x => MathHelper.getDistanceBetweenPoints(this, x) <= this.watchPathRadius);
         if (nearEnemy === undefined) {
             return;
         }
@@ -38,7 +37,7 @@ export default class Tower {
         }
 
         this.timeLastRocketWasShot = new Date(Date.now());
-        const rocket = new Rocket(this.phase, this.x, this.y, nearEnemy);
+        const rocket = new Rocket(this.x, this.y, nearEnemy);
         this.phase.addGameObject(rocket);
     }
 

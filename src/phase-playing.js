@@ -13,14 +13,16 @@ export default class PlayingPhase extends Phase {
     update(context, delta) {
         super.update(context, delta);
 
-        const enemiesSurvived = this.getGameObjects().find(x => x instanceof Enemy && x.reachedFinishLine === true) !== undefined;
+        const enemies = this.getGameObjectsOfType(Enemy);
+        const enemiesSurvived = enemies.find(x => x.reachedFinishLine === true) !== undefined;
         if (enemiesSurvived) {
             this.game.transitionToNextPhase();
         }
     }
 
     getNextPhaseType() {
-        const enemiesSurvived = this.getGameObjects().find(x => x instanceof Enemy && x.reachedFinishLine === true) !== undefined;
+        const enemies = this.getGameObjectsOfType(Enemy);
+        const enemiesSurvived = enemies.find(x => x.reachedFinishLine === true) !== undefined;
         return enemiesSurvived
             ? Enums.phaseType.gameOver
             : Enums.phaseType.planning;
@@ -28,18 +30,16 @@ export default class PlayingPhase extends Phase {
 
     transitionFrom(oldPhase) {
         super.transitionFrom(oldPhase);
-        oldPhase.gameObjects
-            .filter(x => x instanceof GameMap || x instanceof Tower)
-            .forEach(x => {
-                x.phase = this;
-                super.addGameObject(x)
-            });
+        const gameMaps = oldPhase.getGameObjectsOfType(GameMap);
+        const towers = oldPhase.getGameObjectsOfType(Tower);
+        gameMaps.forEach(x => super.addGameObject(x));
+        towers.forEach(x => super.addGameObject(x));
     }
 
     reset() {
         super.reset();
         const enemyStartPosition = gameMapManager.getDirtTilePositions()[0];
-        const enemy = new Enemy(this, enemyStartPosition.x, enemyStartPosition.y);
+        const enemy = new Enemy(enemyStartPosition.x, enemyStartPosition.y);
         super.addGameObject(enemy);
     }
 }

@@ -13,7 +13,7 @@ export default class BootstrapPhase extends Phase {
 
     reset() {
         super.reset();
-        const gameMap = new GameMap(this);
+        const gameMap = new GameMap();
         super.addGameObject(gameMap);
     }
 }

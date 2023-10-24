@@ -2,15 +2,16 @@ import assets from './assets.js';
 import * as Enums from './enums.js';
 import MathHelper from './math-helper.js';
 import Explosion from './explosion.js';
+import GameObject from './game-object.js';
 
-export default class Rocket {
-    constructor(phase, x, y, targetEnemy) {
-        this.phase = phase;
-        this.x = x;
-        this.y = y;
+export default class Rocket extends GameObject {
+    constructor(x, y, targetEnemy) {
+        super(x, y);
+
         this.targetEnemy = targetEnemy;
         this.sprite = assets.getAsset('rocket');
         this.zLayer = Enums.zLayer.missile;
+        this.damage = 25;
     }
 
     update(context, delta) {
@@ -20,9 +21,10 @@ export default class Rocket {
 
         const distanceToEnemy = MathHelper.getDistanceBetweenPoints(this, this.targetEnemy);
         if (distanceToEnemy < 3) {
-            const explosion = new Explosion(this.phase, this.x, this.y);
+            const explosion = new Explosion(this.x, this.y);
             this.phase.removeGameObject(this);
             this.phase.addGameObject(explosion);
+            this.targetEnemy.damage(this.damage);
         }
     }
 
