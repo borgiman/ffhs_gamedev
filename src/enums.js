@@ -1,9 +1,10 @@
 const zLayer = {
     environment: 0,
-    entity: 1,
-    missile: 2,
-    effects: 3,
-    ui: 4
+    defense: 1,
+    entity: 2,
+    missile: 3,
+    effects: 4,
+    ui: 5
 };
 const phaseType = {
     bootstrap: 0,

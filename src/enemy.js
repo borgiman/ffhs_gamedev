@@ -13,7 +13,8 @@ export default class Enemy extends GameObject {
         this.nextDirtTilePositionIndex = 1;
         this.nextDirtTilePosition = gameMapManager.getDirtTilePositions()[this.nextDirtTilePositionIndex];
         this.reachedFinishLine = false;
-        this.health = 50;
+        this.maxHealth = 50;
+        this.health = this.maxHealth;
     }
 
     update(context, delta) {
@@ -46,6 +47,14 @@ export default class Enemy extends GameObject {
         context.rotate(fixSpriteRotationRotation);
         context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
         context.restore();
+
+        context.fillStyle = 'red';
+        context.fillRect(
+            this.x - this.sprite.width / 2,
+            this.y - this.sprite.height / 2 - 20,
+            this.sprite.width * (this.health / this.maxHealth),
+            10
+        );
     }
 
     damage(amount) {

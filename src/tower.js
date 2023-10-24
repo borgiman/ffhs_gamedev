@@ -10,10 +10,8 @@ export default class Tower extends GameObject {
         super(x, y);
 
         this.sprite = Tower.getSprite();
-        this.zLayer = Enums.zLayer.entity;
+        this.zLayer = Enums.zLayer.defense;
         this.watchPathRadius = 150;
-        this.watchPath = new Path2D();
-        this.watchPath.arc(this.x, this.y, this.watchPathRadius, 0, 2 * Math.PI);
         this.minTimeBetweenRockets = 2000;
         this.timeLastRocketWasShot = new Date(Date.now() - this.minTimeBetweenRockets);
         this.lastKnownEnemyPosition = { x, y };
@@ -45,7 +43,6 @@ export default class Tower extends GameObject {
         const lookAtEnemyAngle = MathHelper.getAngleBetweenPoints(this, this.lastKnownEnemyPosition) - Math.PI / 2;
 
         context.save();
-        context.stroke(this.watchPath);
         context.translate(this.x, this.y);
         context.rotate(lookAtEnemyAngle);
         context.drawImage(this.sprite, -this.sprite.width / 2, -this.sprite.height / 2);
