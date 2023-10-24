@@ -9,7 +9,7 @@ export default class GameOverPhase extends Phase {
 
     reset() {
         super.reset();
-        const reloadButton = new Button('Try again', 400, 300, () => location.reload());
+        const reloadButton = new Button('Try again', Enums.position.right / 2, Enums.position.bottom / 2, () => location.reload());
         super.addGameObject(reloadButton);
     }
 }

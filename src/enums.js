@@ -13,4 +13,11 @@ const phaseType = {
     gameOver: 3
 };
 
-export { zLayer, phaseType };
+const position = {
+    left: 0,
+    right: 800,
+    top: 0,
+    bottom: 600
+};
+
+export { zLayer, phaseType, position };

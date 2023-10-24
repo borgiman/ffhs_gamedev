@@ -28,7 +28,7 @@ class Game {
     }
 
     draw(interpolationPercentage) {
-        this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+        this.context.clearRect(Enums.position.left, Enums.position.top, this.canvasElement.width, this.canvasElement.height);
         this.currentActivePhase.draw(this.context, interpolationPercentage);
     }
 

@@ -1,6 +1,7 @@
 class GlobalState {
     constructor() {
         this.level = 1;
+        this.cash = 20;
     }
 }
 

@@ -11,7 +11,7 @@ export default class Tower extends GameObject {
 
         this.sprite = Tower.getSprite();
         this.zLayer = Enums.zLayer.defense;
-        this.watchPathRadius = 150;
+        this.watchRadius = 150;
         this.minTimeBetweenRockets = 2000;
         this.timeLastRocketWasShot = new Date(Date.now() - this.minTimeBetweenRockets);
         this.lastKnownEnemyPosition = { x, y };
@@ -23,7 +23,7 @@ export default class Tower extends GameObject {
         }
 
         const enemies = this.phase.getGameObjectsOfType(Enemy);
-        const nearEnemy = enemies.find(x => MathHelper.getDistanceBetweenPoints(this, x) <= this.watchPathRadius);
+        const nearEnemy = enemies.find(x => MathHelper.getDistanceBetweenPoints(this, x) <= this.watchRadius);
         if (nearEnemy === undefined) {
             return;
         }

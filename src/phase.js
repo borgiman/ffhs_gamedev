@@ -1,8 +1,9 @@
 import GameObject from './game-object.js';
+import * as Enums from './enums.js';
 
 export default class Phase extends GameObject {
     constructor(game, phaseType) {
-        super(0, 0);
+        super(Enums.position.left, Enums.position.top);
 
         this.game = game;
         this.phaseType = phaseType;

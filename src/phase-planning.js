@@ -4,6 +4,7 @@ import gameMapManager from './game-map-manager.js';
 import Tower from './tower.js';
 import GameMap from './game-map.js';
 import Button from './button.js';
+import CashDisplay from './cash-display.js';
 
 export default class PlanningPhase extends Phase {
     constructor(game) {
@@ -41,7 +42,11 @@ export default class PlanningPhase extends Phase {
 
     reset() {
         super.reset();
-        const readyButton = new Button('Ready', 400, 50, () => super.transitionToNextPhase());
+
+        const readyButton = new Button('Ready', Enums.position.right / 2, Enums.position.top + 50, () => super.transitionToNextPhase());
         super.addGameObject(readyButton);
+
+        const cashDisplay = new CashDisplay();
+        super.addGameObject(cashDisplay);
     }
 }

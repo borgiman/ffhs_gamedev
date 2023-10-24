@@ -5,7 +5,7 @@ import GameObject from './game-object.js';
 
 export default class GameMap extends GameObject {
     constructor() {
-        super(0, 0);
+        super(Enums.position.left, Enums.position.top);
 
         this.zLayer = Enums.zLayer.environment;
         this.grassTile = assets.getAsset('grass_tile');
@@ -15,8 +15,8 @@ export default class GameMap extends GameObject {
     draw(context, interpolationPercentage) {
         super.draw(context, interpolationPercentage);
 
-        for (let x = 0; x < gameMapManager.getWidth(); x += this.grassTile.width) {
-            for (let y = 0; y < gameMapManager.getHeight(); y += this.grassTile.height) {
+        for (let x = 0; x < Enums.position.right; x += this.grassTile.width) {
+            for (let y = 0; y < Enums.position.bottom; y += this.grassTile.height) {
                 context.drawImage(this.grassTile, x, y);
             }
         }

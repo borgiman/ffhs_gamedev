@@ -1,23 +1,23 @@
-import bridge from './bridge.js';
 import assets from './assets.js';
 import MathHelper from './math-helper.js';
+import * as Enums from './enums.js';
 
 class GameMapManager {
     constructor() {
-        this.width = bridge.getCanvasRect().width;
-        this.height = bridge.getCanvasRect().height;
+        const width = Enums.position.right;
+        const height = Enums.position.bottom;
         this.dirtTile = assets.getAsset('dirt_tile');
 
         this.bezierPoints = [];
-        this.bezierPoints.push({ x: 0, y: Math.floor(Math.random() * this.height) + 1 });
+        this.bezierPoints.push({ x: 0, y: Math.floor(Math.random() * height) + 1 });
         const numberOfPositionsInBetween = 5;
         for (let i = 0; i < (numberOfPositionsInBetween % 2 === 0 ? numberOfPositionsInBetween + 1 : numberOfPositionsInBetween); i++) {
             this.bezierPoints.push({
-                x: this.width / numberOfPositionsInBetween * i,
-                y: Math.max(Math.random() * this.height - this.dirtTile.height + 1, 0)
+                x: width / numberOfPositionsInBetween * i,
+                y: Math.max(Math.random() * height - this.dirtTile.height + 1, 0)
             });
         }
-        this.bezierPoints.push({ x: this.width, y: Math.floor(Math.random() * this.height) + 1 });
+        this.bezierPoints.push({ x: width, y: Math.floor(Math.random() * height) + 1 });
 
         this.dirtTilePositions = [];
         for (let positionIndex = 2; positionIndex < this.bezierPoints.length; positionIndex += 2) {
@@ -37,14 +37,6 @@ class GameMapManager {
                 this.dirtTilePositions.push({ x, y });
             }
         }
-    }
-
-    getWidth() {
-        return this.width;
-    }
-
-    getHeight() {
-        return this.height;
     }
 
     getDirtTilePositions() {
