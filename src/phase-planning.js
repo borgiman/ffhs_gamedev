@@ -5,6 +5,7 @@ import Tower from './tower.js';
 import GameMap from './game-map.js';
 import Button from './button.js';
 import CashDisplay from './cash-display.js';
+import globalState from './global-state.js';
 
 export default class PlanningPhase extends Phase {
     constructor(game) {
@@ -13,16 +14,23 @@ export default class PlanningPhase extends Phase {
 
     onMouseUp(context, mouseX, mouseY) {
         const handled = super.onMouseUp(context, mouseX, mouseY);
-        if (!handled) {
-            if (gameMapManager.canPlacePlayerEntity(
-                Tower.getWidth(),
-                Tower.getHeight(),
-                mouseX,
-                mouseY
-            )) {
-                const tower = new Tower(mouseX, mouseY);
-                this.addGameObject(tower);
-            }
+        if (handled) {
+            return;
+        }
+
+        if (!gameMapManager.canPlacePlayerEntity(
+            Tower.getWidth(),
+            Tower.getHeight(),
+            mouseX,
+            mouseY
+        )) {
+            return;
+        }
+
+        if (globalState.cash >= Tower.getCost()) {
+            globalState.cash -= Tower.getCost();
+            const tower = new Tower(mouseX, mouseY);
+            this.addGameObject(tower);
         }
     }
 

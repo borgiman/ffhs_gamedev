@@ -60,4 +60,8 @@ export default class Tower extends GameObject {
     static getHeight() {
         return this.getSprite().height;
     }
+
+    static getCost() {
+        return 7;
+    }
 }
