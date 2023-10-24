@@ -14,6 +14,11 @@ export default class PlayingPhase extends Phase {
         super.update(context, delta);
 
         const enemies = this.getGameObjectsOfType(Enemy);
+        const allEnemiesKilled = enemies.length === 0;
+        if (allEnemiesKilled) {
+            this.game.transitionToNextPhase();
+        }
+
         const enemiesSurvived = enemies.find(x => x.reachedFinishLine === true) !== undefined;
         if (enemiesSurvived) {
             this.game.transitionToNextPhase();
