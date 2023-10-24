@@ -13,12 +13,6 @@ class Bridge {
             const game = await import('./game.js');
             game.default.onMouseUp(mouseX, mouseY);
         });
-        this.canvasElement.addEventListener('mousemove', async mouseEvent => {
-            const mouseX = mouseEvent.clientX - this.canvasRect.left;
-            const mouseY = mouseEvent.clientY - this.canvasRect.top;
-            const game = await import('./game.js');
-            game.default.onMouseMove(mouseX, mouseY);
-        });
     }
 
     getCanvasElement() {

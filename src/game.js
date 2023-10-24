@@ -1,5 +1,4 @@
 import bridge from './bridge.js';
-import globalState from './global-state.js';
 import BootstrapPhase from './phase-bootstrap.js';
 import PlanningPhase from './phase-planning.js';
 import PlayingPhase from './phase-playing.js';
@@ -22,10 +21,6 @@ class Game {
 
     onMouseUp(mouseX, mouseY) {
         this.currentActivePhase.onMouseUp(this.context, mouseX, mouseY);
-    }
-
-    onMouseMove(mouseX, mouseY) {
-        globalState.setMousePosition(mouseX, mouseY);
     }
 
     update(delta) {
