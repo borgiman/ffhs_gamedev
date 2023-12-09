@@ -5,6 +5,7 @@ import Tower from './tower.js';
 import Enemy from './enemy.js';
 import gameMapManager from './game-map-manager.js';
 import globalState from './global-state.js';
+import CashDisplay from "./cash-display.js";
 
 export default class PlayingPhase extends Phase {
     constructor(game) {
@@ -39,8 +40,10 @@ export default class PlayingPhase extends Phase {
         super.transitionFrom(oldPhase);
         const gameMaps = oldPhase.getGameObjectsOfType(GameMap);
         const towers = oldPhase.getGameObjectsOfType(Tower);
+        const cashDisplay = oldPhase.getGameObjectsOfType(CashDisplay);
         gameMaps.forEach(x => super.addGameObject(x));
         towers.forEach(x => super.addGameObject(x));
+        cashDisplay.forEach(x => super.addGameObject(x));
     }
 
     reset() {

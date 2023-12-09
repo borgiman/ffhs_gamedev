@@ -1,7 +1,9 @@
+
 class GlobalState {
     constructor() {
-        this.level = 1;
-        this.cash = 20;
+        this.level = 0;
+        this.cash = 0;
+        this.mode = null;
     }
 }
 

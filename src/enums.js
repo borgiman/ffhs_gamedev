@@ -20,4 +20,16 @@ const position = {
     bottom: 600
 };
 
-export { zLayer, phaseType, position };
+const mode = {
+    towerDefense: 0,
+    pathfinder: 1
+};
+
+const grid ={
+    cols: 50,
+    rows: 50,
+    width: 16,
+    height: 12
+}
+
+export { zLayer, phaseType, position, mode, grid };

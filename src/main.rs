@@ -52,6 +52,8 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 200 OK", "src\\global-state.js")
     } else if buffer.starts_with(b"GET /math-helper.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\math-helper.js")
+    } else if buffer.starts_with(b"GET /pathfinder.js HTTP/1.1\r\n") {
+        ("HTTP/1.1 200 OK", "src\\pathfinder.js")
     } else if buffer.starts_with(b"GET /phase.js HTTP/1.1\r\n") {
         ("HTTP/1.1 200 OK", "src\\phase.js")
     } else if buffer.starts_with(b"GET /phase-bootstrap.js HTTP/1.1\r\n") {

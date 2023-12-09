@@ -16,7 +16,6 @@ class Game {
             new GameOverPhase(this)
         ];
         this.currentActivePhase = this.phases.find(x => x.phaseType === Enums.phaseType.bootstrap);
-        this.transitionToNextPhase();
     }
 
     onMouseUp(mouseX, mouseY) {
