@@ -58,11 +58,20 @@ export default class PlanningPhase extends Phase {
         super.addGameObject(gameMap);
 
         const readyButton = new Button('Ready', Enums.position.right / 2, Enums.position.top + 50, () => {
+
             if(globalState.mode === Enums.mode.pathfinder) {
                 gameMapManager.setBezierPointsFromPathfinder(this.gameObjects.filter(x => x instanceof Tower));
                 gameMapManager.setDirtTilePositions();
             }
-            super.transitionToNextPhase();
+
+            if(gameMapManager.getDirtTilePositions().length !==0) {
+                super.transitionToNextPhase();
+            } else {
+                super.removeGameObject(readyButton);
+                const restartButton = new Button('No path found ;(', Enums.position.right / 2, Enums.position.bottom / 2, () => location.reload());
+                super.addGameObject(restartButton);
+            }
+
         });
         super.addGameObject(readyButton);
 

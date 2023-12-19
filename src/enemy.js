@@ -22,9 +22,11 @@ export default class Enemy extends GameObject {
     update(context, delta) {
         super.update(context, delta);
 
-        const deltaMovement = MathHelper.getDeltaMovementFromPointToPoint(0.15, this, this.nextDirtTilePosition, delta);
-        this.x += deltaMovement.x;
-        this.y += deltaMovement.y;
+        if(this.x !== this.nextDirtTilePosition.x || this.y !== this.nextDirtTilePosition.y) {
+            const deltaMovement = MathHelper.getDeltaMovementFromPointToPoint(0.15, this, this.nextDirtTilePosition, delta);
+            this.x += deltaMovement.x;
+            this.y += deltaMovement.y;
+        }
 
         const distanceToNextDirtTile = MathHelper.getDistanceBetweenPoints(this, this.nextDirtTilePosition);
         if (distanceToNextDirtTile < 3) {

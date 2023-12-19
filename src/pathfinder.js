@@ -9,7 +9,6 @@ class Pathfinder {
         this.rows = Enums.grid.rows;
         this.width = Enums.grid.width;
         this.height = Enums.grid.height;
-        this.initGrid();
     }
 
     initGrid(){
@@ -34,10 +33,10 @@ class Pathfinder {
                         bottom: node.y + Enums.grid.height
                     };
                     var towerRect = {
-                        left:   t.x - 50,
-                        top:    t.y - 50,
-                        right:  t.x + 100,
-                        bottom: t.y + 100
+                        left:   t.x - 60,
+                        top:    t.y - 60,
+                        right:  t.x + 120,
+                        bottom: t.y + 120
                     };
                     if( MathHelper.hasIntersection(nodeRect, towerRect)) {
                         node.hasTower = true;
@@ -114,10 +113,22 @@ class Pathfinder {
         const numCols = grid.length;
         const numRows = grid[0].length;
 
-        if (col > 0) neighbors.push(grid[col-1][row]);
-        if (col < numCols - 1) neighbors.push(grid[col+1][row]);
-        if (row > 0) neighbors.push(grid[col][row-1]);
-        if (row < numRows - 1) neighbors.push(grid[col][row+1]);
+        if (col < numCols - 1) {
+            neighbors.push(grid[col + 1][row]);
+            if(row > 0 ) neighbors.push(grid[col + 1][row - 1]);
+        }
+        if (row < numRows - 1) {
+            neighbors.push(grid[col][row + 1]);
+            if (col < numCols - 1) neighbors.push(grid[col + 1][row + 1]);
+        }
+        if (col > 0) {
+            neighbors.push(grid[col - 1][row]);
+            if(row < numRows - 1) neighbors.push(grid[col - 1][row + 1]);
+        }
+        if (row > 0) {
+            neighbors.push(grid[col][row-1]);
+            if(col > 0) neighbors.push(grid[col - 1][row - 1]);
+        }
 
         return neighbors;
     }

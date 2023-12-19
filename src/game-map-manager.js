@@ -31,6 +31,7 @@ class GameMapManager {
     }
 
     setBezierPointsFromPathfinder(towers){
+        pathfinder.initGrid();
         pathfinder.setStartNode();
         pathfinder.setEndNode();
         pathfinder.markTowersInGrid(towers);
